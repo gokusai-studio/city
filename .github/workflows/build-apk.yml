@@ -1,0 +1,40 @@
+name: Build Test APK
+
+# lib/やpubspec.yamlに変更をpushする度、またはActionsタブから手動実行した時にAPKをビルドする。
+# 生成物はActionsの実行結果画面から「Artifacts」としてダウンロードできる。
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Flutter SDKをセットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: android/フォルダが無ければ自動生成して統合
+        run: |
+          if [ ! -d "android" ]; then
+            flutter create --platforms=android --org=com.hakata.rising --project-name=hakata_city_sim _scaffold
+            cp -r _scaffold/android .
+            rm -rf _scaffold
+          fi
+
+      - name: 依存パッケージを取得
+        run: flutter pub get
+
+      - name: テスト用APKをビルド（署名なし・動作確認専用）
+        run: flutter build apk --release
+
+      - name: APKをArtifactsとしてアップロード
+        uses: actions/upload-artifact@v4
+        with:
+          name: hakata-city-sim-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
