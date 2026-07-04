@@ -1,40 +1,18 @@
-import 'dart:async';
-import 'package:in_app_purchase/in_app_purchase.dart';
-
-/// アプリ内課金（資金パック・広告非表示等）の基本サービス。
-/// MVPでは「広告非表示（非消費型）」と「資金パック(消費型)」の2種類を想定。
-///
-/// ⚠️ 商品ID(_productIds)はGoogle Play Consoleの「商品」設定で
-/// 実際に作成したIDと完全一致させる必要がある。ここでは仮IDを置いている。
+/// 課金SDKは現在ビルド互換性を検証中のため一時的に無効化しています。
+/// (v0.4以降で再導入予定)
 class IapService {
   static const String removeAdsId = 'remove_ads_nonconsumable';
   static const String fundsPackSmallId = 'funds_pack_small_consumable';
 
-  static const Set<String> _productIds = {removeAdsId, fundsPackSmallId};
-
-  final InAppPurchase _iap = InAppPurchase.instance;
-  StreamSubscription<List<PurchaseDetails>>? _subscription;
-
-  List<ProductDetails> products = [];
+  List<dynamic> products = [];
   bool adsRemoved = false;
 
-  Future<bool> init() async {
-    final available = await _iap.isAvailable();
-    if (!available) return false;
+  Future<bool> init() async => false;
 
-    final response = await _iap.queryProductDetails(_productIds);
-    products = response.productDetails;
+  Future<void> buy(String productId) async {}
 
-    _subscription = _iap.purchaseStream.listen(
-      _onPurchaseUpdate,
-      onDone: () => _subscription?.cancel(),
-      onError: (_) {},
-    );
-    return true;
-  }
-
-  void _onPurchaseUpdate(List<PurchaseDetails> purchases) {
-    for (final purchase in purchases) {
+  void dispose() {}
+}    for (final purchase in purchases) {
       if (purchase.status == PurchaseStatus.purchased ||
           purchase.status == PurchaseStatus.restored) {
         if (purchase.productID == removeAdsId) {
