@@ -1,40 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-/// 画面下部に常時表示するバナー広告。
-/// ゲームプレイ(タップ操作領域)を阻害しない位置に固定表示する。
-///
-/// ⚠️ 重要: 下記のadUnitIdはGoogle公式の「テスト用広告ユニットID」です。
-/// 本番リリース前に必ずAdMobコンソールで取得した自分のIDに置き換えてください。
-/// テストIDのまま申請するとポリシー違反にはなりませんが収益は発生しません。
-class BannerAdWidget extends StatefulWidget {
+/// 広告SDKは現在ビルド互換性を検証中のため一時的に無効化しています。
+/// (v0.4以降で再導入予定)
+class BannerAdWidget extends StatelessWidget {
   const BannerAdWidget({super.key});
 
   @override
-  State<BannerAdWidget> createState() => _BannerAdWidgetState();
-}
-
-class _BannerAdWidgetState extends State<BannerAdWidget> {
-  BannerAd? _bannerAd;
-  bool _isLoaded = false;
-
-  // Google公式テスト用バナー広告ユニットID（Android）
-  static const String _testAdUnitId = 'ca-app-pub-3940256099942544/6300978111';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadAd();
+  Widget build(BuildContext context) {
+    return const SizedBox.shrink();
   }
-
-  void _loadAd() {
-    _bannerAd = BannerAd(
-      adUnitId: _testAdUnitId,
-      size: AdSize.banner,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) => setState(() => _isLoaded = true),
-        onAdFailedToLoad: (ad, error) {
+}        onAdFailedToLoad: (ad, error) {
           ad.dispose();
           // 広告読み込み失敗はゲーム体験に影響させない（何も表示しないだけ）
         },
