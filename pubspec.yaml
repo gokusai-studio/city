@@ -12,16 +12,11 @@ dependencies:
   flutter_riverpod: ^2.5.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  google_mobile_ads: ^4.0.0
-  in_app_purchase: ^3.2.0
-  games_services: ^4.1.0
   cupertino_icons: ^1.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  hive_generator: ^2.0.1
-  build_runner: ^2.4.9
   flutter_lints: ^4.0.0
 
 flutter:
